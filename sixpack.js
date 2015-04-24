@@ -138,7 +138,16 @@
                     if (res.statusCode == 500) {
                         data = {status: "failed", response: body};
                     } else {
-                        data = JSON.parse(body);
+                        try {
+                            data = JSON.parse(body);
+                        } catch(err) {
+                            if (console && console.error && console.dir) {
+                                console.error("Sixpack error parsing from server:");
+                                console.dir(err);
+                                console.error("Tried to make a request to: " + url + " and failed to parse:");
+                                console.error(body);
+                            }
+                        }
                     }
                     if (!timed_out) {
                         clearTimeout(timeout_handle);
